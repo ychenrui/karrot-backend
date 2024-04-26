@@ -6,6 +6,7 @@ from django.db import models, transaction
 from django.db.models import BooleanField, CharField, DateTimeField, EmailField, ForeignKey, TextField
 from django.dispatch import Signal
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 from versatileimagefield.fields import VersatileImageField
 
 from karrot.base.base_models import BaseModel, LocationModel, UploadToUUID
@@ -183,6 +184,13 @@ class User(AbstractBaseUser, BaseModel, LocationModel):
         self.save()
         VerificationCode.objects.filter(user=self, type=VerificationCode.PASSWORD_RESET).delete()
         prepare_passwordreset_success_email(self).send()
+
+    @transaction.atomic
+    def change_username(self, new_username):
+        if User.objects.filter(username=new_username).exists():
+            raise ValidationError("This username is already taken.")
+        self.username = new_username
+        self.save()
 
     @transaction.atomic
     def erase(self):

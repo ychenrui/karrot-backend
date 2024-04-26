@@ -1,0 +1,29 @@
+<mjml>
+    <mj-head>
+        <mj-include path="../../base/templates/_base-head.mjml" />
+        <mj-title
+            >{% trans %}Username Updated Successfully!{% endtrans %}</mj-title
+        >
+    </mj-head>
+    <mj-body>
+        <mj-include path="../../base/templates/_header.mjml" />
+        <mj-section>
+            <mj-column>
+                <mj-text>
+                    <h1>
+                        {% trans %}You have updated your username for {{
+                        site_name }}{% endtrans %}
+                    </h1>
+                </mj-text>
+                <mj-text>
+                    <p>
+                        {% trans %}Your username has been successfully changed.
+                        You can now use your new username to log in to your
+                        account.{% endtrans %}
+                    </p>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-include path="../../base/templates/_footer.mjml" />
+    </mj-body>
+</mjml>
