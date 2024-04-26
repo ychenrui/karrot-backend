@@ -83,6 +83,22 @@ class TestUserModel(TestCase):
         with self.assertRaisesMessage(IntegrityError, "already exists"):
             get_user_model().objects.create_user(faker.email(), "foo", display_name="I am normal", username="KaRrOt")
 
+    def test_change_username_successfully(self):
+        new_username = 'newusername'
+        self.user.change_username(new_username)
+        self.user.refresh_from_db() 
+        self.assertEqual(self.user.username, new_username)
+
+    def test_change_username_to_existing_username_fails(self):
+        UserFactory(username='existingusername')
+        with self.assertRaises(IntegrityError):
+            self.user.change_username('existingusername')
+
+    def test_change_username_case_insensitivity(self):
+        UserFactory(username='CaseSensitiveUsername')
+        with self.assertRaises(IntegrityError):
+                self.user.change_username('casesensitiveusername')
+
 
 class TestSendMail(TestCase):
     def setUp(self):
